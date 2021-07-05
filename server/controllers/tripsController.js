@@ -8,7 +8,7 @@ trips.get("/", async (req, res) => {
     res.status(200).json({
       status: "success",
       results: rows.length,
-      data: { trips: rows },
+      trip: rows,
     });
   } catch (err) {
     console.log(err);
@@ -23,7 +23,7 @@ trips.get("/:id", async (req, res) => {
     if (rows[0]?.id === id) {
       res.json({
         status: "success",
-        data: { trip: rows[0] },
+        trip: rows[0],
       });
     } else {
       res.status(302).redirect("/404");
@@ -43,7 +43,7 @@ trips.post("/", async (req, res) => {
     );
     res.status(201).json({
       status: "success",
-      data: { trip: rows[0] },
+      trip: rows[0],
     });
   } catch (err) {
     res.status(400).send(err);
@@ -63,10 +63,10 @@ trips.put("/:id", async (req, res) => {
     if (rows[0]?.id === id) {
       res.status(200).json({
         status: "success",
-        data: { trip: rows[0] },
+        trip: rows[0],
       });
     } else {
-      res.status(404).json({ status: "failed", data: "Not Found" });
+      res.status(404).json({ status: "failed", trip: "Not Found" });
     }
   } catch (err) {
     console.log(err);
@@ -84,10 +84,10 @@ trips.delete("/:id", async (req, res) => {
     if (rows[0]?.id === id) {
       res.status(200).json({
         status: "success",
-        data: { trip: rows[0] },
+        trip: rows[0],
       });
     } else {
-      res.status(404).json({ status: "failed", data: "Not Found" });
+      res.status(404).json({ status: "failed", trip: "Not Found" });
     }
   } catch (err) {
     console.log(err);
