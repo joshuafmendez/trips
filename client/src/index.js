@@ -1,11 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { BrowserRouter as Router } from "react-router-dom";
+import { TripsStoreProvider } from "./store/TripsStore";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <TripsStoreProvider>
+    <Router>
+      <App />
+    </Router>
+  </TripsStoreProvider>,
+  document.getElementById("root")
 );
