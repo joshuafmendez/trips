@@ -20,10 +20,13 @@ trips.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const { rows } = await db.query("SELECT * FROM trips WHERE id = $1", [id]);
+
+    const review = await db.query("SELECT * FROM reviews WHERE trip_id = $1", [id]);
     if (rows[0]?.id === id) {
       res.json({
         status: "success",
         trip: rows[0],
+        review: review.rows
       });
     } else {
       res.status(302).redirect("/404");
@@ -33,7 +36,7 @@ trips.get("/:id", async (req, res) => {
   }
 });
 
-// CREATE
+// CREATE trip
 trips.post("/", async (req, res) => {
   try {
     const { name, location, price_range } = req.body;
@@ -44,6 +47,24 @@ trips.post("/", async (req, res) => {
     res.status(201).json({
       status: "success",
       trip: rows[0],
+    });
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
+});
+
+trips.post("/:id/addReview", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, body, rating } = req.body;
+    const { rows } = await db.query(
+      "INSERT INTO reviews (trip_id, name, body, rating) VALUES ($1, $2, $3, $4) RETURNING *",
+      [id, name, body, rating]
+    );
+    res.status(201).json({
+      status: "success",
+      review: rows[0],
     });
   } catch (err) {
     res.status(400).send(err);
