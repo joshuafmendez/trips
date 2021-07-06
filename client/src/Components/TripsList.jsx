@@ -17,6 +17,17 @@ const TripsList = () => {
     fetchData();
   }, [setTrips]);
 
+  const handleDelete = async (id) => {
+    try {
+      const {data} = await TripsRater.delete(`/${id}`);
+      setTrips(trips.filter(trip => {
+        return trip.id !== id;
+      }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       <table className="table table-hover table-striped">
@@ -43,7 +54,7 @@ const TripsList = () => {
                   <button className="btn btn-warning">Update</button>
                 </td>
                 <td>
-                  <button className="btn btn-danger">Delete</button>
+                  <button onClick={() => handleDelete(id)} className="btn btn-danger">Delete</button>
                 </td>
               </tr>
             );
