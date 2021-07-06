@@ -46,9 +46,10 @@ const TripsList = () => {
     if(!trip.count){
       return <span className="text-warning">0 reviews</span>
     }
+    console.log(trip)
     return (
       <div>
-        <StarRating rating={trip.id} />
+        <StarRating rating={trip.avg_rating} />
         <span className="text-warning ml-1">({trip.count})</span>
       </div>
     );
