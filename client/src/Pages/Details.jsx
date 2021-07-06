@@ -1,5 +1,7 @@
+import DetailTrip from "../Components/DetailTrip";
+
 const Details = () => {
-  return <div>Details</div>;
+  return <DetailTrip />;
 };
 
 export default Details;

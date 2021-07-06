@@ -18,7 +18,8 @@ const TripsList = () => {
     fetchData();
   }, [setTrips]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
     try {
       await TripsRater.delete(`/${id}`);
       setTrips(
@@ -31,8 +32,13 @@ const TripsList = () => {
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (e, id) => {
+    e.stopPropagation();
     history.push(`/trips/${id}/update`);
+  };
+
+  const handleTripSelection = (id) => {
+    history.push(`/trips/${id}`);
   };
 
   return (
@@ -53,14 +59,14 @@ const TripsList = () => {
             trips.map((trip) => {
               const { id, name, location, price_range } = trip;
               return (
-                <tr key={id}>
+                <tr key={id} onClick={() => handleTripSelection(id)}>
                   <td>{name}</td>
                   <td>{location}</td>
                   <td>{"$".repeat(price_range)}</td>
                   <td>Reviews</td>
                   <td>
                     <button
-                      onClick={() => handleUpdate(id)}
+                      onClick={(e) => handleUpdate(e, id)}
                       className="btn btn-warning"
                     >
                       Update
@@ -68,7 +74,7 @@ const TripsList = () => {
                   </td>
                   <td>
                     <button
-                      onClick={() => handleDelete(id)}
+                      onClick={(e) => handleDelete(e, id)}
                       className="btn btn-danger"
                     >
                       Delete
