@@ -1,10 +1,16 @@
 const trips = require("express").Router();
 const db = require("../db");
 
+// "SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id WHERE id = $1"
+
 // GET ALL
 trips.get("/", async (req, res) => {
   try {
-    const { rows } = await db.query("SELECT * FROM trips");
+    // const { rows } = await db.query("SELECT * FROM trips");
+    const { rows } = await db.query(
+      "SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id"
+    );
+    console.log(rows);
     res.status(200).json({
       status: "success",
       results: rows.length,
@@ -19,14 +25,15 @@ trips.get("/", async (req, res) => {
 trips.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await db.query("SELECT * FROM trips WHERE id = $1", [id]);
-
-    const review = await db.query("SELECT * FROM reviews WHERE trip_id = $1", [id]);
+    const { rows } = await db.query("SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id WHERE id = $1", [id]);
+    const review = await db.query("SELECT * FROM reviews WHERE trip_id = $1", [
+      id,
+    ]);
     if (rows[0]?.id === id) {
       res.json({
         status: "success",
         trip: rows[0],
-        review: review.rows
+        review: review.rows,
       });
     } else {
       res.status(302).redirect("/404");

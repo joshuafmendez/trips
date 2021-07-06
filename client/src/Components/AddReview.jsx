@@ -5,7 +5,7 @@ import TripsRater from "../apis/TripsRater";
 const AddReview = () => {
   const { id } = useParams();
   const [name, setName] = useState("");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState("Rating");
   const [review, setReview] = useState("");
 
   const handleSubmit = async (e) => {
@@ -16,6 +16,9 @@ const AddReview = () => {
         rating,
         body: review,
       });
+      setName("");
+      setRating("Rating");
+      setReview("");
     } catch (error) {
       console.log(error);
     }
@@ -25,7 +28,7 @@ const AddReview = () => {
     <div className="d-flex mb-2 justify-content-center">
       <form>
         <div className="row">
-          <div className="form-group col-8">
+          <div className="form-group col-7">
             <label htmlFor="name">Name</label>
             <input
               value={name}
@@ -36,7 +39,7 @@ const AddReview = () => {
               placeholder="name"
             />
           </div>
-          <div className="form-group col-4">
+          <div className="form-group col-5">
             <label htmlFor="rating">Rating</label>
             <select
               value={rating}

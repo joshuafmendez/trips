@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import TripsRater from "../apis/TripsRater";
 import { TripsStore } from "../store/TripsStore";
 import { useHistory } from "react-router-dom";
+import StarRating from "./StarRating";
 
 const TripsList = () => {
   const { trips, setTrips } = useContext(TripsStore);
@@ -41,6 +42,18 @@ const TripsList = () => {
     history.push(`/trips/${id}`);
   };
 
+  const renderRating = (trip) => {
+    if(!trip.count){
+      return <span className="text-warning">0 reviews</span>
+    }
+    return (
+      <div>
+        <StarRating rating={trip.id} />
+        <span className="text-warning ml-1">({trip.count})</span>
+      </div>
+    );
+  };
+
   return (
     <div>
       <table className="table table-hover table-striped">
@@ -63,7 +76,7 @@ const TripsList = () => {
                   <td>{name}</td>
                   <td>{location}</td>
                   <td>{"$".repeat(price_range)}</td>
-                  <td>Reviews</td>
+                  <td>{renderRating(trip)}</td>
                   <td>
                     <button
                       onClick={(e) => handleUpdate(e, id)}

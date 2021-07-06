@@ -17,6 +17,9 @@ const AddTrip = () => {
         price_range: priceRange,
       });
       addTrip(data.trip);
+      setName("");
+      setLocation("");
+      setPriceRange("Price Range");
     } catch (error) {
       console.log(error);
     }

@@ -4,7 +4,7 @@ import TripsRater from "../apis/TripsRater";
 import { TripsStore } from "../store/TripsStore";
 import AddReview from "./AddReview";
 import ReviewsCard from "./ReviewsCard";
-// import StarRating from "./StarRating";
+import StarRating from "./StarRating";
 
 const DetailTrip = () => {
   const { id } = useParams();
@@ -20,18 +20,24 @@ const DetailTrip = () => {
       }
     };
     fetchData();
-  }, [id, selectedTrip,setSelectedTrip]);
+  }, [id, selectedTrip, setSelectedTrip]);
   return (
     <div>
-        {selectedTrip && (
-          <>
-            <h1 className="text-center">{selectedTrip.trip.name}</h1>
-            <div className="mt-3">
-              <AddReview />
-              <ReviewsCard reviews={selectedTrip.review} />
-            </div>
-          </>
-        )}
+      {selectedTrip && (
+        <>
+          <h1 className="text-center">{selectedTrip.trip.name}</h1>
+          <div className="text-center">
+            <StarRating rating={selectedTrip.trip.avg_rating} />
+            <span className="text-warning ml-1">
+              {selectedTrip.trip.count ? `(${selectedTrip.trip.count})` : "(0)"}
+            </span>
+          </div>
+          <div className="mt-3">
+            <AddReview />
+            <ReviewsCard reviews={selectedTrip.review} />
+          </div>
+        </>
+      )}
     </div>
   );
 };
