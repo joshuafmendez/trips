@@ -11,7 +11,7 @@ const AddTrip = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const {data} = await TripsRater.post("/", {
+      const { data } = await TripsRater.post("/", {
         name,
         location,
         price_range: priceRange,

@@ -1,14 +1,15 @@
 import { useContext, useEffect } from "react";
 import TripsRater from "../apis/TripsRater";
 import { TripsStore } from "../store/TripsStore";
+import { useHistory } from "react-router-dom";
 
 const TripsList = () => {
   const { trips, setTrips } = useContext(TripsStore);
+  let history = useHistory();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await TripsRater.get("/");
-        console.log(data.trip);
         setTrips(data.trip);
       } catch (error) {
         console.log(error);
@@ -19,14 +20,20 @@ const TripsList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const {data} = await TripsRater.delete(`/${id}`);
-      setTrips(trips.filter(trip => {
-        return trip.id !== id;
-      }))
+      await TripsRater.delete(`/${id}`);
+      setTrips(
+        trips.filter((trip) => {
+          return trip.id !== id;
+        })
+      );
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  const handleUpdate = (id) => {
+    history.push(`/trips/${id}/update`);
+  };
 
   return (
     <div>
@@ -42,23 +49,34 @@ const TripsList = () => {
           </tr>
         </thead>
         <tbody className="table-dark">
-          {trips && trips.map((trip) => {
-            const { id, name, location, price_range } = trip;
-            return (
-              <tr key={id}>
-                <td>{name}</td>
-                <td>{location}</td>
-                <td>{"$".repeat(price_range)}</td>
-                <td>Reviews</td>
-                <td>
-                  <button className="btn btn-warning">Update</button>
-                </td>
-                <td>
-                  <button onClick={() => handleDelete(id)} className="btn btn-danger">Delete</button>
-                </td>
-              </tr>
-            );
-          })}
+          {trips &&
+            trips.map((trip) => {
+              const { id, name, location, price_range } = trip;
+              return (
+                <tr key={id}>
+                  <td>{name}</td>
+                  <td>{location}</td>
+                  <td>{"$".repeat(price_range)}</td>
+                  <td>Reviews</td>
+                  <td>
+                    <button
+                      onClick={() => handleUpdate(id)}
+                      className="btn btn-warning"
+                    >
+                      Update
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDelete(id)}
+                      className="btn btn-danger"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
