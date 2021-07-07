@@ -10,7 +10,6 @@ trips.get("/", async (req, res) => {
     const { rows } = await db.query(
       "SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id"
     );
-    console.log(rows);
     res.status(200).json({
       status: "success",
       results: rows.length,
