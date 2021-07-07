@@ -1,12 +1,9 @@
 const trips = require("express").Router();
 const db = require("../db");
 
-// "SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id WHERE id = $1"
-
 // GET ALL
 trips.get("/", async (req, res) => {
   try {
-    // const { rows } = await db.query("SELECT * FROM trips");
     const { rows } = await db.query(
       "SELECT * FROM trips LEFT JOIN (select trip_id, COUNT(*), TRUNC(AVG(rating),1) AS avg_rating FROM reviews GROUP BY trip_id) reviews on trips.id = reviews.trip_id"
     );
